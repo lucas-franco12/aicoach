@@ -9,13 +9,11 @@ import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github.css";
 
 interface AIChatProps {
-  lessonId: string;
+  language: string;
 }
 
-const AIChat: React.FC<AIChatProps> = ({ lessonId }) => {
-  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
-    []
-  );
+const AIChat: React.FC<AIChatProps> = ({ language }) => {
+  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -25,8 +23,6 @@ const AIChat: React.FC<AIChatProps> = ({ lessonId }) => {
       messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
     }
   };
-
-  console.log("lessonId", lessonId);
 
   useEffect(() => {
     scrollToBottom();
@@ -50,7 +46,10 @@ const AIChat: React.FC<AIChatProps> = ({ lessonId }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ messages: formattedMessages }),
+          body: JSON.stringify({ 
+            messages: formattedMessages,
+            language: language 
+          }),
         });
 
         if (!response.ok) {

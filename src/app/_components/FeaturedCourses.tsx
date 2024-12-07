@@ -2,13 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  Globe2,
-  GraduationCap,
-  Languages,
-  Music,
-  Coffee,
-} from "lucide-react";
+import { Globe2, GraduationCap, Languages, Music, Coffee } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -74,9 +68,9 @@ export function FeaturedCourses() {
     if (!container) return;
 
     const handleScroll = () => {
-      const scrollPosition = container.scrollTop;
-      const itemHeight = container.clientHeight / 3; // Show 3 items at a time
-      const newIndex = Math.round(scrollPosition / itemHeight);
+      const scrollPosition = container.scrollLeft;
+      const itemWidth = container.clientWidth / 3; // Show 3 items at a time
+      const newIndex = Math.round(scrollPosition / itemWidth);
       setActiveIndex(Math.min(newIndex, languageCoaches.length - 1));
     };
 
@@ -85,27 +79,24 @@ export function FeaturedCourses() {
   }, [languageCoaches.length]);
 
   return (
-    <section
-      id="coaches"
-      className="py-20 bg-gradient-to-b from-background to-muted"
-    >
+    <section id="coaches" className="py-20 bg-gradient-to-b from-background to-muted">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">
           Choose Your Language Coach
         </h2>
 
-        <div className="max-w-4xl mx-auto relative">
-          {/* Gradient overlays */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent z-10"></div>
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10"></div>
+        <div className="max-w-full mx-auto relative">
+          {/* Horizontal gradient overlays */}
+          <div className="absolute top-0 left-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10"></div>
+          <div className="absolute top-0 right-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10"></div>
 
           {/* Coaches container */}
           <div
             ref={containerRef}
-            className="relative h-[600px] overflow-y-auto hide-scrollbar"
-            style={{ scrollSnapType: "y mandatory" }}
+            className="relative w-full overflow-x-auto hide-scrollbar"
+            style={{ scrollSnapType: "x mandatory" }}
           >
-            <div className="space-y-6 py-32">
+            <div className="flex space-x-6 px-32">
               {languageCoaches.map((coach, index) => {
                 const isActive = index === activeIndex;
                 const scale = isActive ? 1 : 0.85;
@@ -114,11 +105,12 @@ export function FeaturedCourses() {
                 return (
                   <div
                     key={index}
-                    className="transition-all duration-300 ease-out"
+                    className="transition-all duration-300 ease-out flex-shrink-0"
                     style={{
                       scrollSnapAlign: "center",
                       transform: `scale(${scale})`,
                       opacity,
+                      width: "400px", // Fixed width for each card
                     }}
                   >
                     <Card className="p-6 flex items-center space-x-6 hover:shadow-lg transition-shadow bg-card/50 backdrop-blur-sm">
@@ -135,16 +127,12 @@ export function FeaturedCourses() {
                       </div>
 
                       <div className="flex-grow">
-                        <h3 className="text-xl font-semibold mb-2">
-                          {coach.title}
-                        </h3>
-                        <p className="text-muted-foreground mb-3">
-                          {coach.description}
-                        </p>
+                        <h3 className="text-xl font-semibold mb-2">{coach.title}</h3>
+                        <p className="text-muted-foreground mb-3">{coach.description}</p>
                         <p className="text-sm font-medium text-primary mb-4">
                           Specialties: {coach.specialty}
                         </p>
-                        <Link href="/courses/123asd/learn/1/1" passHref>
+                        <Link href={`/chat/${coach.language.toLowerCase()}`} passHref>
                           <Button
                             variant={isActive ? "default" : "outline"}
                             className="w-full"
