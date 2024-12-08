@@ -8,18 +8,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 export function FeaturedCourses() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const languageCoaches = [
     {
-      title: "Spanish Coach María",
-      icon: Languages,
-      description:
-        "Native Spanish expert with interactive conversation practice",
-      language: "Spanish",
-      avatar: "/coaches/maria.jpg",
-      specialty: "Conversational Spanish, Business Spanish",
+      title: "Korean Coach Min",
+      icon: Music,
+      description: "Learn Korean through K-pop and drama contexts",
+      language: "Korean",
+      avatar: "/coaches/min.jpg",
+      specialty: "K-pop Korean, Daily Conversation",
     },
     {
       title: "Japanese Coach Yuki",
@@ -38,20 +35,13 @@ export function FeaturedCourses() {
       specialty: "French Culture, Business French",
     },
     {
-      title: "Korean Coach Min",
-      icon: Music,
-      description: "Learn Korean through K-pop and drama contexts",
-      language: "Korean",
-      avatar: "/coaches/min.jpg",
-      specialty: "K-pop Korean, Daily Conversation",
-    },
-    {
-      title: "Italian Coach Marco",
-      icon: Coffee,
-      description: "Experience Italian language through culture and cuisine",
-      language: "Italian",
-      avatar: "/coaches/marco.jpg",
-      specialty: "Culinary Italian, Travel Italian",
+      title: "Spanish Coach María",
+      icon: Languages,
+      description:
+        "Native Spanish expert with interactive conversation practice",
+      language: "Spanish",
+      avatar: "/coaches/maria.jpg",
+      specialty: "Conversational Spanish, Business Spanish",
     },
     {
       title: "German Coach Hannah",
@@ -61,19 +51,54 @@ export function FeaturedCourses() {
       avatar: "/coaches/hannah.jpg",
       specialty: "Business German, Technical German",
     },
+    {
+      title: "Italian Coach Marco",
+      icon: Coffee,
+      description: "Experience Italian language through culture and cuisine",
+      language: "Italian",
+      avatar: "/coaches/marco.jpg",
+      specialty: "Culinary Italian, Travel Italian",
+    }
   ];
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  // Calculate true center index
+  const initialCenterIndex = Math.floor(languageCoaches.length / 2);
+  const [activeIndex, setActiveIndex] = useState(initialCenterIndex);
+
+  // Center on mount
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+  
+    requestAnimationFrame(() => {
+      const itemWidth = container.scrollWidth / languageCoaches.length; // Width of each item
+      const containerWidth = container.clientWidth; // Visible area of the container
+      const scrollPosition = itemWidth * initialCenterIndex - containerWidth / 2 + itemWidth / 2;
+  
+      container.scrollLeft = scrollPosition; // Scroll to center the desired element
+    });
+  }, [initialCenterIndex, languageCoaches.length]);
 
+  // Handle scroll
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+  
     const handleScroll = () => {
-      const scrollPosition = container.scrollLeft;
-      const itemWidth = container.clientWidth / 3; // Show 3 items at a time
-      const newIndex = Math.round(scrollPosition / itemWidth);
-      setActiveIndex(Math.min(newIndex, languageCoaches.length - 1));
+      const itemWidth = container.scrollWidth / languageCoaches.length; // Width of each item
+      const scrollPosition = container.scrollLeft; // Current scroll position
+      const containerWidth = container.clientWidth; // Visible container width
+      let newIndex = Math.round(
+        (scrollPosition + containerWidth / 2 - itemWidth / 2) / itemWidth
+      ); // Calculate the center index
+  
+      // Clamp the index to ensure it stays within bounds
+      newIndex = Math.max(0, Math.min(newIndex, languageCoaches.length - 1));
+  
+      setActiveIndex(newIndex);
     };
-
+  
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [languageCoaches.length]);
@@ -86,11 +111,10 @@ export function FeaturedCourses() {
         </h2>
 
         <div className="max-w-full mx-auto relative">
-          {/* Horizontal gradient overlays */}
+          {/* Gradient overlays */}
           <div className="absolute top-0 left-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10"></div>
           <div className="absolute top-0 right-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10"></div>
 
-          {/* Coaches container */}
           <div
             ref={containerRef}
             className="relative w-full overflow-x-auto hide-scrollbar"
@@ -110,21 +134,22 @@ export function FeaturedCourses() {
                       scrollSnapAlign: "center",
                       transform: `scale(${scale})`,
                       opacity,
-                      width: "400px", // Fixed width for each card
+                      width: "400px",
                     }}
                   >
                     <Card className="p-6 flex items-center space-x-6 hover:shadow-lg transition-shadow bg-card/50 backdrop-blur-sm">
-                      <div className="relative w-32 h-32 flex-shrink-0">
-                        <div className="w-full h-full rounded-full overflow-hidden border-4 border-primary/20">
-                          <Image
-                            src={coach.avatar}
-                            alt={coach.title}
-                            width={128}
-                            height={128}
-                            className="object-cover"
-                          />
-                        </div>
+                    <div className="relative w-32 h-32 flex-shrink-0">
+                      <div className="w-full h-full rounded-full overflow-hidden border-4 border-primary/20">
+                        <Image
+                          src={coach.avatar}
+                          alt={coach.title}
+                          width={128}
+                          height={128}
+                          className="w-full h-full object-cover"
+                          priority
+                        />
                       </div>
+                    </div>
 
                       <div className="flex-grow">
                         <h3 className="text-xl font-semibold mb-2">{coach.title}</h3>
