@@ -13,13 +13,13 @@ import {
 
 export function LearningStats() {
   const data = [
-    { day: "Mon", hours: 2 },
-    { day: "Tue", hours: 3 },
-    { day: "Wed", hours: 1.5 },
-    { day: "Thu", hours: 4 },
-    { day: "Fri", hours: 2.5 },
-    { day: "Sat", hours: 3.5 },
-    { day: "Sun", hours: 2 },
+    { day: "Mon", hours: 1 },
+    { day: "Tue", hours: 1.5 },
+    { day: "Wed", hours: .75 },
+    { day: "Thu", hours: 2},
+    { day: "Fri", hours: 1.25 },
+    { day: "Sat", hours: 1.75 },
+    { day: "Sun", hours: 1},
   ];
 
   return (
@@ -33,7 +33,7 @@ export function LearningStats() {
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="day" />
-              <YAxis />
+              <YAxis domain={[0, 2]} />
               <Tooltip />
               <Line
                 type="monotone"
@@ -45,8 +45,8 @@ export function LearningStats() {
           </ResponsiveContainer>
         </div>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p>Total this week: 18.5 hours</p>
-          <p>10% increase from last week</p>
+          <p>Total this week: 5 hours</p>
+          <p>15% increase from last week</p>
         </div>
       </CardContent>
     </Card>

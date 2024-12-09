@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Award, Zap } from "lucide-react";
+import { Trophy, Award, Zap, Clock, Star } from "lucide-react";
 
 export function AchievementsMilestones() {
   const achievements = [
@@ -10,7 +10,9 @@ export function AchievementsMilestones() {
     { id: 2, name: "Consistent", icon: <Trophy className="h-4 w-4" /> },
   ];
   const streak = 7;
-  const nextMilestone = "Complete 5 quizzes";
+  const totalXP = 1250;
+  const totalHours = 24;
+  const nextBadge = 2000;
 
   return (
     <Card>
@@ -18,7 +20,7 @@ export function AchievementsMilestones() {
         <CardTitle>Achievements & Milestones</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-6">
           {achievements.map((achievement) => (
             <Badge
               key={achievement.id}
@@ -30,13 +32,22 @@ export function AchievementsMilestones() {
             </Badge>
           ))}
         </div>
-        <div className="flex items-center gap-2 mb-4">
-          <Award className="h-5 w-5 text-yellow-500" />
-          <span className="font-medium">{streak} day streak!</span>
+        <div className="flex flex-col items-center gap-2 mb-6">
+          <Award className="h-12 w-12 text-yellow-500" />
+          <span className="font-medium text-lg">{streak} Day Streak!</span>
         </div>
-        <div>
-          <h4 className="font-medium mb-2">Next Milestone:</h4>
-          <p className="text-sm text-muted-foreground">{nextMilestone}</p>
+        <div className="space-y-3 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <Star className="h-4 w-4 text-primary" />
+            <span>{totalXP} XP Earned</span>
+          </div>
+          <div className="flex items-center justify-center gap-2">
+            <Clock className="h-4 w-4 text-primary" />
+            <span>{totalHours} Hours Practiced</span>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {nextBadge - totalXP} XP until next badge
+          </div>
         </div>
       </CardContent>
     </Card>

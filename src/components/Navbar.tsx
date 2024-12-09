@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Brain, Menu, X } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,37 +15,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Mock function to check authentication status
-const isAuthenticated = () => {
-  //check the authentication state
-  return localStorage.getItem("isLoggedIn") === "true";
-};
-
 export function Navbar() {
-  const pathname = usePathname();
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Sync login state on mount
   useEffect(() => {
-    setIsLoggedIn(isAuthenticated());
+    const loginState = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loginState);
   }, []);
 
-  const navItems = [
-    { href: "/courses", label: "Explore Courses" },
-    { href: "/resources", label: "Resources" },
-    { href: "/community", label: "Community" },
-  ];
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", "false");
+    setIsLoggedIn(false);
+    router.push("/"); // Redirect to homepage after logout
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const navItems = [
+    { href: "/coaches", label: "Explore Coaches" },
+    { href: "/resources", label: "Resources" },
+    { href: "/community", label: "Community" },
+  ];
+
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Brain className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-bold">BullsEAI</span>
+          <span className="text-2xl font-bold">LingualAI</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -54,9 +57,7 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm font-medium hover:text-primary ${
-                pathname === item.href ? "text-primary" : ""
-              }`}
+              className="text-sm font-medium hover:text-primary"
             >
               {item.label}
             </Link>
@@ -77,15 +78,18 @@ export function Navbar() {
         </button>
 
         {/* Authentication Section */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center space-x-4">
           {isLoggedIn ? (
-            <div className="flex items-center space-x-4">
+            <>
+              {/* Dashboard Link */}
               <Link
                 href="/dashboard"
                 className="text-sm font-medium hover:text-primary"
               >
                 Dashboard
               </Link>
+
+              {/* Profile Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar>
@@ -106,23 +110,16 @@ export function Navbar() {
                     <Link href="/settings">Settings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      localStorage.setItem("isLoggedIn", "false");
-                      setIsLoggedIn(false);
-                    }}
-                  >
-                    Log out
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Log Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div>
+            </>
           ) : (
             <Button
-              onClick={() => {
-                localStorage.setItem("isLoggedIn", "true");
-                setIsLoggedIn(true);
-              }}
+              onClick={() => router.push("/auth/login")}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Sign In
             </Button>
@@ -138,9 +135,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium hover:text-primary ${
-                  pathname === item.href ? "text-primary" : ""
-                }`}
+                className="text-sm font-medium hover:text-primary"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.label}
@@ -174,18 +169,19 @@ export function Navbar() {
                     localStorage.setItem("isLoggedIn", "false");
                     setIsLoggedIn(false);
                     setIsMobileMenuOpen(false);
+                    router.push("/");
                   }}
                 >
-                  Log out
+                  Log Out
                 </Button>
               </>
             ) : (
               <Button
                 onClick={() => {
-                  localStorage.setItem("isLoggedIn", "true");
-                  setIsLoggedIn(true);
+                  router.push("/auth/login");
                   setIsMobileMenuOpen(false);
                 }}
+                className="w-full bg-primary text-primary-foreground"
               >
                 Sign In
               </Button>

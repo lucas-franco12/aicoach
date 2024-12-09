@@ -5,20 +5,21 @@ import "react-circular-progressbar/dist/styles.css";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ProgressOverview() {
-  const overallProgress = 68;
-  const learningHours = 12.5;
+  const weeklyGoal = 6; // 5 hours per week
+  const hoursCompleted = 5;
+  const progressPercentage = (hoursCompleted / weeklyGoal) * 100;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Progress Overview</CardTitle>
+        <CardTitle>Weekly Goal Progress</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-center">
           <div className="w-32 h-32">
             <CircularProgressbar
-              value={overallProgress}
-              text={`${overallProgress}%`}
+              value={progressPercentage}
+              text={`${Math.round(progressPercentage)}%`}
               styles={buildStyles({
                 textSize: "16px",
                 pathColor: `hsl(var(--primary))`,
@@ -28,12 +29,12 @@ export function ProgressOverview() {
             />
           </div>
         </div>
-        <p className="text-center mt-4">Overall course completion</p>
+        <p className="text-center mt-4">Weekly goal completion</p>
         <p className="text-center text-2xl font-bold mt-2">
-          {learningHours} hours
+          {hoursCompleted} hours
         </p>
         <p className="text-center text-muted-foreground">
-          Total learning this week
+          Hours completed this week
         </p>
       </CardContent>
     </Card>
