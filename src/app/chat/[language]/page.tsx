@@ -9,31 +9,31 @@ const COACHES = {
     name: "Hannah",
     language: "german",
     avatar: "/coaches/hannah.jpg",
-    greeting: "Hallo! Ich bin Hannah, deine KI-Sprachlehrerin."
+    greeting: { default: "Hallo! Ich bin Hannah, deine KI-Sprachlehrerin." }
   },
   french: {
     name: "Pierre",
     language: "french",
     avatar: "/coaches/pierre.jpg",
-    greeting: "Bonjour! Je suis Pierre, votre professeur d'IA."
+    greeting: { default: "Bonjour! Je suis Pierre, votre professeur d'IA." }
   },
   spanish: {
     name: "María",
     language: "spanish",
     avatar: "/coaches/maria.jpg",
-    greeting: "¡Hola! Soy María, tu profesora de IA."
+    greeting: { default: "¡Hola! Soy María, tu profesora de IA." }
   },
   japanese: {
     name: "Yuki",
     language: "japanese",
     avatar: "/coaches/yuki.jpg",
-    greeting: "こんにちは！ユキです。"
+    greeting: { default: "こんにちは！ユキです。" }
   },
   korean: {
     name: "Min",
     language: "korean",
     avatar: "/coaches/min.jpg",
-    greeting: "안녕하세요! 저는 민입니다."
+    greeting: { default: "안녕하세요! 저는 민입니다." }
   }
 };
 

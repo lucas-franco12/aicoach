@@ -64,7 +64,7 @@ const COACH_GREETINGS = {
 const AIChat: React.FC<AIChatProps> = ({ coach }) => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([
     {
-      text: COACH_GREETINGS[coach.language],
+      text: COACH_GREETINGS[coach.language as SupportedLanguage],
       isUser: false
     }
   ]);
